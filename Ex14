@@ -1,0 +1,182 @@
+public class Ex14 
+{
+    /**
+     * Return the minimum distance between two given numbers, in a given array, if both of them exist in the array
+     * Running time complications: o(n), checking all the array's values. place complications: o(1)
+     * @param [] a an integers array
+     * @param x a given number
+     * @param y a given number
+     * @return the minimum distance between two given numbers, in a given array, and integer.MAX_VALUE, if both of them
+     * or one of them arent exist
+     */
+    public static int findMinDiff(int[] a, int x, int y)
+    {
+        int minDis=Integer.MAX_VALUE;
+        int sum=0;
+        int xIndex=-1;//the x index in the array
+        int yIndex=-1;//the y index in the array
+        final int MINUSONE=-1;
+        final int ZEROW=0;
+        for (int i=0;i<a.length;i++)
+        {
+            if(a[i]==x)
+                xIndex=i;
+            if(a[i]==y)
+                yIndex=i;
+            sum=Math.abs(yIndex-xIndex);//calculate the distance between two given numbers, in a given array
+            if(minDis>sum && xIndex!=MINUSONE && yIndex!=MINUSONE)//checkig if the distance between specific indexs is the minimum distance
+                minDis=sum;
+        }
+        if(minDis==ZEROW)//checking if the numbers are exist in the array 
+            return Integer.MAX_VALUE;
+        return minDis;//the minimum distance between two given numbers, in a given array
+    }
+
+    /**
+     * return if a given number is in the given 2 dimensional array who sorted rotationally, divided array  
+     * to four squares, each one is bigger than the other, 4 bigger than 3, 3 bigger than 2, 2 bigger than 1. And also
+     * each square is divided and so.
+     * Running time complications: o(logn), binary search. place complications: o(1)
+     * @param mat 2 dimensional array who sorted rotationally
+     * @param num given number
+     * @return true if the num is exist in the array and false if it isn't
+     */
+    public static boolean search(int [][] mat, int num)
+    {
+        int low=0,firstC=0;//the first row/col 
+        int high= mat.length-1,lastC= mat.length-1;//the last row/col
+        int mid1,mid2;
+        int i=0,j=0;//the row/col of the given num if it is exist in the array
+        final int TWO=2;
+        final int ONE=1;
+        if(mat[0][0]>num)
+            return false;
+        while (low<=high){
+            if (num == mat[i][j]){
+                System.out.println("row = " + i + "\n" + "col = " + j);//printing the row and the col of the given number in the array
+                return true;
+            }
+            mid1=helpMid1(low,high);//calculation of the middle between the first row and the last row by helper method
+            mid2=helpMid2(firstC,lastC);//calculation of the middle between the first col and the last col by helper method
+            if (num > mat[mid1][mid2+ONE]){//checking if the num is bigger than the maximum value of the second aquare
+                low = mid1 + ONE;//the first row becomes to the half couse to focus on the 3,4 squares
+                if (num > mat[high][mid2+ONE]){//checking if the num is bigger than the maximum value of the third aquare
+                    i=high;
+                    lastC = mid2;//the last col becomes to the half couse to focus on the 4 squares
+                    mid2=helpMid2(firstC,lastC);
+                    j=mid2;
+                }
+                else{
+                    i=high;
+                    j=mid2+ONE;
+                    firstC = mid2 + ONE;//the first col becomes to the half couse to focus on the 4 square
+                }
+            }
+            else{
+                i = mid1;
+                j = mid2 + ONE;
+                if (num < mat[mid1][mid2+ONE]){//checking if the num is smaller than the maximum value of the second aquare
+                    high=mid1;
+                    mid1=helpMid1(low,high);
+                    mid2=helpMid2(firstC,lastC);
+                    if (num < mat[mid1][mid2+ONE]){//checking if the num is smaller than the minimum value of the second aquare
+                        i = mid1;
+                        j = mid2;
+                        lastC=mid2;//the last col becomes to the half couse to focus on the 1 square
+                    }
+                    else
+                        firstC = mid2+ONE;//the first col becomes to the half couse to focus on the 2 square
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * helper method to calculate the middle between the first row and the last row
+     * @param low first row in the array
+     * @param high last row in the array
+     * @return the middle between the first row and the last row or 0 in case the sum between them is 1
+     */
+    private static int helpMid1(int low, int high){
+        final int TWO=2;
+        final int ONE=1;
+        final int ZEROW=0;
+        if (low+high==ONE)
+            return ZEROW;
+        return (low+high)/TWO;//the middle between the first row and the last row
+    }
+
+    /**
+     * helper method to calculate the middle between the first col and the last col
+     * @param c first col in the array
+     * @param d last col in the array
+     * @return the middle between the first col and the last col or 0 in case the sum between them is 1
+     */
+    private static int helpMid2 (int firstC, int lastC){
+        final int TWO=2;
+        final int ONE=1;
+        final int ZEROW=0;
+        if (firstC+lastC==ONE)
+            return ZEROW;
+        return (firstC+lastC)/TWO;//the middle between the first col and the last col
+    }
+
+    /**
+     * Return true if the array is divided into two equal groups with equal sum
+     * @param [] arr a given array
+     * @return true if the array is divided into two equal groups with equal sum and false if not
+     */
+    public static boolean equalSplit(int[] arr)
+    {
+        return equalSplit(arr,0, 0, 0, 0, 0);
+    }
+
+    /**
+     * Return true if the array is divided into two equal groups with equal sum
+     * @param [] arr a given array
+     * @param i the current index
+     * @param count1 counting the values in the first group
+     * @param sum1 summarize the values in the first group
+     * @param count2 counting the values in the second group
+     * @param sum2 summarize the values in the second group
+     * @return true if the array is divided into two equal groups with equal sum and false if not
+     */
+    private static boolean equalSplit(int[] arr, int i, int count1, int sum1, int count2, int sum2)
+    {
+        if (i == arr.length)
+            return sum1 == sum2 && count1== count2;
+        return equalSplit(arr, i+1, count1+1, sum1 + arr[i], count2, sum2) ||
+        equalSplit(arr, i+1, count1, sum1, count2+1, sum2 + arr[i]);
+    }
+
+    /**
+     * Return true if the given number is special number-a number that hasn't been deleted after deleteing numbers 
+     * by the numbers's order from the positive integers group
+     * @param n a given number
+     * @return true if the number is special, false if the number isn't
+     */
+    public static boolean isSpecial(int n)
+    {
+        return isSpecial(n,n,2,0);
+    }
+
+    /**
+     * Return true if the given number is special number-a number that hasn't been deleted after deleteing numbers 
+     * by the numbers's order from the positive integers group
+     * @param n a given number
+     * @param i the current index of the given number
+     * @param k the index number that the value is deleted 
+     * @param newIndex calculation of the new index
+     * @return true if the number is special, false if the number isn't
+     */
+    private static boolean isSpecial(int n,int i,int k,int newIndex){
+        final int ZEROW=0;
+        if (k==i||n%2==ZEROW)
+            return false;
+        if (k>i)
+            return true;
+        newIndex=i-(i/k);//calculation of the new index after deleting numbers by the numbers's order from the group
+        return isSpecial(n,newIndex,k+1,newIndex);//checking with the next deleted number
+    }
+}
