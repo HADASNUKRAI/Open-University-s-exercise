@@ -1,0 +1,61 @@
+/**
+ * the program asking from the user for a positive 3 digit number and to do with the number some functions and she return if
+ * the result is the same as the number 1089
+ * @HADAS NUKRAI
+ * @11/10/2021
+ */
+import java.util.Scanner;
+public class Einstein
+{
+    public static void main (String []args)
+    {
+        Scanner scan=new Scanner (System.in);
+        int num;
+        int first;
+        int last;
+        int New_Num;
+        int mid;
+        int remainder;
+        int newNumber;
+        int sum;
+        final int NUMBER=1089;
+        System.out.println("The game keep a number and get a number from the user and ask for some requests :");
+        System.out.println(".1 switch the first digit with the last one and the opposite");
+        System.out.println(".2 subtract the small number by the big number");
+        System.out.println(".3 reverse the result");
+        System.out.println(".4 summarize the reverse result and the result");
+        System.out.println("the final result is the same number as the game kept at the beggning of the game");
+        System.out.println("Please enter a positive three digit number whose first and last digits are different:");
+        //Printing the instractions for the user
+        num=scan.nextInt();//the user enter the number he chose
+        if(num/100==(num%10)*100)
+        {
+            System.out.println("FAILED");
+            return;
+        }
+        if(num<100 || num>999)
+        {
+            System.out.println("The number you entered is not a 3 digit positive number");
+            return;
+        }
+        //returning FAILED if the number the user enter isnt corect
+        else
+            System.out.println("User number is: "+num);
+        last=num/100;//calculate the last digit
+        first=(num%10)*100;//calculate the first digit
+        mid=(num/10%10)*10;//calculate the middle digit
+        New_Num=first+mid+last;//calculate the reverse number
+        remainder=Math.abs(New_Num-num);// calculate the difference between the original numer to the reverse number
+        System.out.println("Difference: "+remainder);
+        last=remainder/100;
+        first=(remainder%10)*100;
+        mid=(remainder/10%10)*10;
+        newNumber=first+mid+last;//calculate the reverse difference
+        System.out.println("Reversed difference: "+newNumber);
+        sum=newNumber+Math.abs(remainder);//summerize the original difference and the reverse difference
+        if(NUMBER==sum)
+            System.out.println("SUCCEEDED");
+        else
+            System.out.println("FAILED");
+    }
+}
